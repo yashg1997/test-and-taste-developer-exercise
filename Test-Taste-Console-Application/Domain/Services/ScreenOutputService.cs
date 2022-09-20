@@ -22,8 +22,12 @@ namespace Test_Taste_Console_Application.Domain.Services
 
         public void OutputAllPlanetsAndTheirMoonsToConsole()
         {
+            AddConsoleLoadingText();
+
             //The service gets all the planets from the API.
             var planets = _planetService.GetAllPlanets().ToArray();
+
+            ClearCurrentConsoleLine();
 
             //If the planets aren't found, then the function stops and tells that to the user via the console.
             if (!planets.Any())
@@ -31,6 +35,7 @@ namespace Test_Taste_Console_Application.Domain.Services
                 Console.WriteLine(OutputString.NoPlanetsFound);
                 return;
             }
+            AddConsoleWritingText();
 
             //The column sizes and labels for the planets are configured here. 
             var columnSizesForPlanets = new[] { 20, 20, 30, 20 };
@@ -48,6 +53,7 @@ namespace Test_Taste_Console_Application.Domain.Services
                 OutputString.MoonNumber, OutputString.MoonId
             };
 
+            ClearCurrentConsoleLine();
             //The for loop creates the correct output.
             for (int i = 0, j = 1; i < planets.Length; i++, j++)
             {
@@ -101,8 +107,11 @@ namespace Test_Taste_Console_Application.Domain.Services
 
         public void OutputAllMoonsAndTheirMassToConsole()
         {
+            AddConsoleLoadingText();
+
             //The function works the same way as the PrintAllPlanetsAndTheirMoonsToConsole function. You can find more comments there.
             var moons = _moonService.GetAllMoons().ToArray();
+            ClearCurrentConsoleLine();
             
             if (!moons.Any())
             {
@@ -110,12 +119,15 @@ namespace Test_Taste_Console_Application.Domain.Services
                 return;
             }
 
+            AddConsoleWritingText();
+
             var columnSizesForMoons = new[] { 20, 20, 30, 20 };
             var columnLabelsForMoons = new[]
             {
                 OutputString.MoonNumber, OutputString.MoonId, OutputString.MoonMassExponent, OutputString.MoonMassValue
             };
 
+            ClearCurrentConsoleLine();
             ConsoleWriter.CreateHeader(columnLabelsForMoons, columnSizesForMoons);
 
             for (int i = 0, j = 1; i < moons.Length; i++, j++)
@@ -145,13 +157,20 @@ namespace Test_Taste_Console_Application.Domain.Services
 
         public void OutputAllPlanetsAndTheirAverageMoonGravityToConsole()
         {
+
+            AddConsoleLoadingText();
+
             //The function works the same way as the PrintAllPlanetsAndTheirMoonsToConsole function. You can find more comments there.
             var planets = _planetService.GetAllPlanets().ToArray();
+
+            ClearCurrentConsoleLine();
             if (!planets.Any())
             {
                 Console.WriteLine(OutputString.NoMoonsFound);
                 return;
             }
+
+            AddConsoleWritingText();
 
             var columnSizes = new[] { 20, 30 };
             var columnLabels = new[]
@@ -159,6 +178,7 @@ namespace Test_Taste_Console_Application.Domain.Services
                 OutputString.PlanetId, OutputString.PlanetMoonAverageGravity
             };
 
+            ClearCurrentConsoleLine();
 
             ConsoleWriter.CreateHeader(columnLabels, columnSizes);
 
@@ -184,6 +204,34 @@ namespace Test_Taste_Console_Application.Domain.Services
                 1                   |0.0f
                 --------------------+--------------------------------------------------
             */
+        }
+
+        /// <summary>
+        /// Clears the current line of the console
+        /// </summary>
+        public static void ClearCurrentConsoleLine()
+        {
+            int currentLineCursor = Console.CursorTop;
+            Console.SetCursorPosition(0, Console.CursorTop);
+            for (int i = 0; i < Console.WindowWidth; i++)
+                Console.Write(" ");
+            Console.SetCursorPosition(0, currentLineCursor);
+        }
+
+        /// <summary>
+        /// Adding indication that the data is loading in console
+        /// </summary>
+        public static void AddConsoleLoadingText()
+        {
+            Console.Write(OutputString.DataLoading);
+        }
+
+        /// <summary>
+        /// Adding indication that the data is being written in console
+        /// </summary>
+        public static void AddConsoleWritingText()
+        {
+            Console.Write(OutputString.DataWriting);
         }
     }
 }

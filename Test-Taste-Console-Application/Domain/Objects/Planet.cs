@@ -12,11 +12,12 @@ namespace Test_Taste_Console_Application.Domain.Objects
         public ICollection<Moon> Moons { get; set; }
         public float AverageMoonGravity
         {
-            get => 0.0f;
+            get;
         }
 
         public Planet(PlanetDto planetDto)
         {
+            AverageMoonGravity = 0;
             Id = planetDto.Id;
             SemiMajorAxis = planetDto.SemiMajorAxis;
             Moons = new Collection<Moon>();
@@ -24,12 +25,18 @@ namespace Test_Taste_Console_Application.Domain.Objects
             {
                 foreach (MoonDto moonDto in planetDto.Moons)
                 {
+                    //Calculating etting the total gravity
+                    AverageMoonGravity += moonDto.Gravity??=0;
+
                     Moons.Add(new Moon(moonDto));
                 }
+
+                //Calculating the Average Moon Gravity
+                AverageMoonGravity /= Moons.Count;
             }
         }
 
-        public Boolean HasMoons()
+        public bool HasMoons()
         {
             return (Moons != null && Moons.Count > 0);
         }
